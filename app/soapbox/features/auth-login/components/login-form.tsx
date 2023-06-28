@@ -9,8 +9,8 @@ import ConsumersList from './consumers-list';
 
 const messages = defineMessages({
   username: {
-    id: 'login.fields.username_label',
-    defaultMessage: 'E-mail or username',
+    id: 'registration.fields.username_placeholder',
+    defaultMessage: 'Username',
   },
   email: {
     id: 'login.fields.email_label',

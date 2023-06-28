@@ -18,7 +18,7 @@ const messages = defineMessages({
   home: { id: 'header.home.label', defaultMessage: 'Home' },
   login: { id: 'header.login.label', defaultMessage: 'Log in' },
   register: { id: 'header.register.label', defaultMessage: 'Register' },
-  username: { id: 'header.login.username.placeholder', defaultMessage: 'E-mail or username' },
+  username: { id: 'registration.fields.username_placeholder', defaultMessage: 'Username' },
   email: { id: 'header.login.email.placeholder', defaultMessage: 'E-mail address' },
   password: { id: 'header.login.password.label', defaultMessage: 'Password' },
   forgotPassword: { id: 'header.login.forgot_password', defaultMessage: 'Forgot password?' },
