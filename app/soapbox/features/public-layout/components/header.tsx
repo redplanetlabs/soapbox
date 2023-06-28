@@ -6,7 +6,7 @@ import { logIn, verifyCredentials } from 'soapbox/actions/auth';
 import { fetchInstance } from 'soapbox/actions/instance';
 import { openModal } from 'soapbox/actions/modals';
 import SiteLogo from 'soapbox/components/site-logo';
-import { Button, Form, HStack, IconButton, Input, Tooltip } from 'soapbox/components/ui';
+import { Button, Form, HStack, IconButton, Input } from 'soapbox/components/ui';
 import { useSoapboxConfig, useOwnAccount, useAppDispatch, useRegistrationStatus, useFeatures } from 'soapbox/hooks';
 
 import Sonar from './sonar';
@@ -142,16 +142,6 @@ const Header = () => {
                 autoCorrect='off'
                 autoCapitalize='off'
               />
-
-              <Link to='/reset-password'>
-                <Tooltip text={intl.formatMessage(messages.forgotPassword)}>
-                  <IconButton
-                    src={require('@tabler/icons/help.svg')}
-                    className='cursor-pointer bg-transparent text-gray-700 hover:text-gray-800 dark:text-gray-600 dark:hover:text-gray-500'
-                    iconClassName='h-5 w-5'
-                  />
-                </Tooltip>
-              </Link>
 
               <Button
                 theme='primary'

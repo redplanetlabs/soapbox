@@ -7,7 +7,7 @@ import { logIn, verifyCredentials } from 'soapbox/actions/auth';
 import { fetchInstance } from 'soapbox/actions/instance';
 import { openSidebar } from 'soapbox/actions/sidebar';
 import SiteLogo from 'soapbox/components/site-logo';
-import { Avatar, Button, Form, HStack, IconButton, Input, Tooltip } from 'soapbox/components/ui';
+import { Avatar, Button, Form, HStack, Input } from 'soapbox/components/ui';
 import Search from 'soapbox/features/compose/components/search';
 import { useAppDispatch, useFeatures, useOwnAccount, useRegistrationStatus } from 'soapbox/hooks';
 
@@ -125,16 +125,6 @@ const Navbar = () => {
                     placeholder={intl.formatMessage(messages.password)}
                     className='max-w-[200px]'
                   />
-
-                  <Link to='/reset-password'>
-                    <Tooltip text={intl.formatMessage(messages.forgotPassword)}>
-                      <IconButton
-                        src={require('@tabler/icons/help.svg')}
-                        className='cursor-pointer bg-transparent text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200'
-                        iconClassName='h-5 w-5'
-                      />
-                    </Tooltip>
-                  </Link>
 
                   <Button
                     theme='primary'

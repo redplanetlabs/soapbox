@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import { Button, Form, FormActions, FormGroup, Input, Stack } from 'soapbox/components/ui';
 import { useFeatures } from 'soapbox/hooks';
@@ -54,17 +53,7 @@ const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
             />
           </FormGroup>
 
-          <FormGroup
-            labelText={passwordLabel}
-            hintText={
-              <Link to='/reset-password' className='hover:underline' tabIndex={-1}>
-                <FormattedMessage
-                  id='login.reset_password_hint'
-                  defaultMessage='Trouble logging in?'
-                />
-              </Link>
-            }
-          >
+          <FormGroup labelText={passwordLabel}>
             <Input
               aria-label={passwordLabel}
               placeholder={passwordLabel}
