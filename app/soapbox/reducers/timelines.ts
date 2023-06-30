@@ -116,11 +116,7 @@ const expandNormalizedTimeline = (
 
     if (!newIds.isEmpty()) {
       timeline.update('items', oldIds => {
-        if (newIds.first() > oldIds.first()!) {
-          return mergeStatusIds(oldIds, newIds);
-        } else {
-          return mergeStatusIds(newIds, oldIds);
-        }
+        return mergeStatusIds(newIds, oldIds);
       });
     }
   }));
