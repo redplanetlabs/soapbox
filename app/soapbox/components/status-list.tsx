@@ -15,6 +15,8 @@ import { ALGORITHMS } from 'soapbox/features/timeline-insertion';
 import PendingStatus from 'soapbox/features/ui/components/pending-status';
 import { useSoapboxConfig } from 'soapbox/hooks';
 import useAds from 'soapbox/queries/ads';
+import { store } from 'soapbox/store';
+import { compareDate } from 'soapbox/utils/comparators';
 
 import type { OrderedSet as ImmutableOrderedSet } from 'immutable';
 import type { VirtuosoHandle } from 'react-virtuoso';
@@ -184,7 +186,7 @@ const StatusList: React.FC<IStatusList> = ({
 
   const renderStatuses = (): React.ReactNode[] => {
     if (isLoading || statusIds.size > 0) {
-      return statusIds.toList().reduce((acc, statusId, index) => {
+      return statusIds.sortBy(id => store.getState().statuses.get(id)?.created_at || '', compareDate).toList().reduce((acc, statusId, index) => {
         if (showAds && ads) {
           const ad = ALGORITHMS[adsAlgorithm]?.(ads, index, { ...adsOpts, seed: seed.current });
 
