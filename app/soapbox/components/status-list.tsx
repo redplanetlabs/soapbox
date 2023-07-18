@@ -180,8 +180,15 @@ const StatusList: React.FC<IStatusList> = ({
     ));
   };
 
-  const renderFeedSuggestions = (): React.ReactNode => {
-    return <FeedSuggestions key='suggestions' />;
+  const renderFeedSuggestions = (statusId: string): React.ReactNode => {
+    return (
+      <FeedSuggestions
+        key='suggestions'
+        statusId={statusId}
+        onMoveUp={handleMoveUp}
+        onMoveDown={handleMoveDown}
+      />
+    );
   };
 
   const renderStatuses = (): React.ReactNode[] => {
@@ -203,7 +210,7 @@ const StatusList: React.FC<IStatusList> = ({
           }
         } else if (statusId.startsWith('末suggestions-')) {
           if (soapboxConfig.feedInjection) {
-            acc.push(renderFeedSuggestions());
+            acc.push(renderFeedSuggestions(statusId));
           }
         } else if (statusId.startsWith('末pending-')) {
           acc.push(renderPendingStatus(statusId));
