@@ -288,15 +288,6 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
                     onClick={onClose}
                   />
 
-                  {features.federating && (
-                    <SidebarLink
-                      to='/domain_blocks'
-                      icon={require('@tabler/icons/ban.svg')}
-                      text={intl.formatMessage(messages.domainBlocks)}
-                      onClick={onClose}
-                    />
-                  )}
-
                   {(features.filters || features.filtersV2) && (
                     <SidebarLink
                       to='/filters'
