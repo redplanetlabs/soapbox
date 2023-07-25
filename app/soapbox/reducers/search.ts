@@ -85,7 +85,7 @@ const importResults = (state: State, results: APIEntity, searchTerm: string, sea
 const paginateResults = (state: State, searchType: SearchFilter, results: APIEntity, searchTerm: string, next: string | null) => {
   return state.withMutations(state => {
     if (state.value === searchTerm) {
-      state.setIn(['results', `${searchType}HasMore`], results[searchType].length >= 20);
+      state.setIn(['results', `${searchType}HasMore`], next !== null);
       state.setIn(['results', `${searchType}Loaded`], true);
       state.set('next', next);
       state.updateIn(['results', searchType], items => {
