@@ -334,9 +334,9 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   };
 
   const handleCopy: React.EventHandler<React.MouseEvent> = (e) => {
-    const { uri } = status;
+    const { url } = status;
 
-    copy(uri);
+    copy(url);
   };
 
   const onModerate: React.MouseEventHandler = (e) => {
