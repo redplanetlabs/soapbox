@@ -24,15 +24,14 @@ import VerificationBadge from 'soapbox/components/verification-badge';
 import MovedNote from 'soapbox/features/account-timeline/components/moved-note';
 import ActionButton from 'soapbox/features/ui/components/action-button';
 import SubscriptionButton from 'soapbox/features/ui/components/subscription-button';
-import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
+import { useAppDispatch, useFeatures, useOwnAccount } from 'soapbox/hooks';
 import { normalizeAttachment } from 'soapbox/normalizers';
 import { ChatKeys, useChats } from 'soapbox/queries/chats';
 import { queryClient } from 'soapbox/queries/client';
 import { Account } from 'soapbox/schemas';
 import toast from 'soapbox/toast';
-import { isDefaultHeader, isLocal, isRemote } from 'soapbox/utils/accounts';
+import { isDefaultHeader, isRemote } from 'soapbox/utils/accounts';
 import copy from 'soapbox/utils/copy';
-import { MASTODON, parseVersion } from 'soapbox/utils/features';
 
 const messages = defineMessages({
   edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
@@ -89,8 +88,6 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const features = useFeatures();
   const { account: ownAccount } = useOwnAccount();
   const { follow } = useFollow();
-
-  const { software } = useAppSelector((state) => parseVersion(state.instance.version));
 
   const { getOrCreateChatByAccountId } = useChats();
 
@@ -264,10 +261,6 @@ const Header: React.FC<IHeader> = ({ account }) => {
     }
   };
 
-  const handleRssFeedClick = () => {
-    window.open(software === MASTODON ? `${account.url}.rss` : `${account.url}/feed.rss`, '_blank');
-  };
-
   const handleShare = () => {
     navigator.share({
       text: `@${account.acct}`,
@@ -286,14 +279,6 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
     if (!account) {
       return [];
-    }
-
-    if (features.rssFeeds && isLocal(account)) {
-      menu.push({
-        text: intl.formatMessage(messages.subscribeFeed),
-        action: handleRssFeedClick,
-        icon: require('@tabler/icons/rss.svg'),
-      });
     }
 
     if ('share' in navigator) {

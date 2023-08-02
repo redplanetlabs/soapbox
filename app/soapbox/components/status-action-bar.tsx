@@ -23,7 +23,7 @@ import { HStack } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount, useSettings, useSoapboxConfig } from 'soapbox/hooks';
 import { GroupRoles } from 'soapbox/schemas/group-member';
 import toast from 'soapbox/toast';
-import { isLocal, isRemote } from 'soapbox/utils/accounts';
+import { isRemote } from 'soapbox/utils/accounts';
 import copy from 'soapbox/utils/copy';
 import { getReactForStatus, reduceEmoji } from 'soapbox/utils/emoji-reacts';
 
@@ -325,13 +325,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     history.push(`/@${status.account.acct}/posts/${status.id}`);
   };
 
-  const handleEmbed = () => {
-    dispatch(openModal('EMBED', {
-      url: status.url,
-      onError: (error: any) => toast.showAlertForError(error),
-    }));
-  };
-
   const handleReport: React.EventHandler<React.MouseEvent> = (e) => {
     dispatch(initReport(ReportableEntities.STATUS, status.account as Account, { status }));
   };
@@ -414,14 +407,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
         action: handleCopy,
         icon: require('@tabler/icons/clipboard-copy.svg'),
       });
-
-      if (features.embeds && isLocal(account)) {
-        menu.push({
-          text: intl.formatMessage(messages.embed),
-          action: handleEmbed,
-          icon: require('@tabler/icons/share.svg'),
-        });
-      }
     }
 
     if (!me) {
