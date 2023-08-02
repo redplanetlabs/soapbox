@@ -109,7 +109,7 @@ export const HashtagTimeline: React.FC<IHashtagTimeline> = ({ params }) => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     unsubscribe();
