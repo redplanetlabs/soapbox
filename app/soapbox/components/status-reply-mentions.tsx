@@ -1,3 +1,4 @@
+import { List as ImmutableList } from 'immutable';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -8,7 +9,7 @@ import HoverStatusWrapper from 'soapbox/components/hover-status-wrapper';
 import { useAppDispatch } from 'soapbox/hooks';
 import { isPubkey } from 'soapbox/utils/nostr';
 
-import type { Account, Status } from 'soapbox/types/entities';
+import type { Account, Status, Mention } from 'soapbox/types/entities';
 
 interface IStatusReplyMentions {
   status: Status
@@ -33,7 +34,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
     return null;
   }
 
-  const to = status.mentions;
+  const to = status.mentions.groupBy(x => x.username).map(x => x.first()).toList() as ImmutableList<Mention>;
 
   // The post is a reply, but it has no mentions.
   // Rare, but it can happen.
