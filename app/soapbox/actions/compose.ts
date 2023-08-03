@@ -95,6 +95,7 @@ const messages = defineMessages({
   editSuccess: { id: 'compose.edit_success', defaultMessage: 'Your post was edited' },
   uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
   uploadErrorPoll: { id: 'upload_error.poll', defaultMessage: 'File upload not allowed with polls.' },
+  uploadErrorEmpty: { id: 'upload_error.empty', defaultMessage: 'Your post is empty.' },
   view: { id: 'toast.view', defaultMessage: 'View' },
   replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
   replyMessage: { id: 'confirmations.reply.message', defaultMessage: 'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?' },
@@ -311,6 +312,7 @@ const submitCompose = (composeId: string, routerHistory?: History, force = false
     }
 
     if ((!status || !status.length) && media.size === 0) {
+      toast.error(messages.uploadErrorEmpty);
       return;
     }
 
