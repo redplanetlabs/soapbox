@@ -133,7 +133,9 @@ const StatusContent: React.FC<IStatusContent> = ({
     return translatable && status.translation ? status.translation.get('content')! : status.contentHtml;
   }, [status.contentHtml, status.translation]);
 
-  if (status.content.length === 0) {
+  const hasPoll = status.poll && typeof status.poll === 'string';
+
+  if (status.content.length === 0 && !hasPoll) {
     return null;
   }
 
@@ -168,7 +170,6 @@ const StatusContent: React.FC<IStatusContent> = ({
       output.push(<ReadMoreButton onClick={onClick} key='read-more' />);
     }
 
-    const hasPoll = status.poll && typeof status.poll === 'string';
     if (hasPoll) {
       output.push(<Poll id={status.poll} key='poll' status={status.url} />);
     }
@@ -190,7 +191,7 @@ const StatusContent: React.FC<IStatusContent> = ({
       />,
     ];
 
-    if (status.poll && typeof status.poll === 'string') {
+    if (hasPoll) {
       output.push(<Poll id={status.poll} key='poll' status={status.url} />);
     }
 
