@@ -3,7 +3,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
-import { blockAccount } from 'soapbox/actions/accounts';
+import { blockAccount, unmuteAccount, unblockAccount } from 'soapbox/actions/accounts';
 import { launchChat } from 'soapbox/actions/chats';
 import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'soapbox/actions/compose';
 import { editEvent } from 'soapbox/actions/events';
@@ -14,7 +14,7 @@ import { initMuteModal } from 'soapbox/actions/mutes';
 import { initReport, ReportableEntities } from 'soapbox/actions/reports';
 import { deleteStatus, editStatus, toggleMuteStatus } from 'soapbox/actions/statuses';
 import { deleteFromTimelines } from 'soapbox/actions/timelines';
-import { useBlockGroupMember, useGroup, useGroupRelationship, useMuteGroup, useUnmuteGroup } from 'soapbox/api/hooks';
+import { useBlockGroupMember, useGroup, useGroupRelationship, useMuteGroup, useUnmuteGroup, useAccountLookup } from 'soapbox/api/hooks';
 import { useDeleteGroupStatus } from 'soapbox/api/hooks/groups/useDeleteGroupStatus';
 import DropdownMenu from 'soapbox/components/dropdown-menu';
 import StatusActionButton from 'soapbox/components/status-action-button';
@@ -100,6 +100,8 @@ const messages = defineMessages({
   report: { id: 'status.report', defaultMessage: 'Report @{name}' },
   share: { id: 'status.share', defaultMessage: 'Share' },
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
+  unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
+  unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
   unmuteGroup: { id: 'group.unmute.long_label', defaultMessage: 'Unmute Group' },
   unmuteSuccess: { id: 'group.unmute.success', defaultMessage: 'Unmuted the group' },
@@ -145,6 +147,8 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const { account } = useOwnAccount();
   const isStaff = account ? account.staff : false;
   const isAdmin = account ? account.admin : false;
+
+  const { account: statusAccount } = useAccountLookup(status?.account.username, { withRelationship: true });
 
   if (!status) {
     return null;
@@ -283,6 +287,10 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     dispatch(initMuteModal(status.account as Account));
   };
 
+  const handleUnmuteClick: React.EventHandler<React.MouseEvent> = (e) => {
+    dispatch(unmuteAccount(status.account.id));
+  };
+
   const handleMuteGroupClick: React.EventHandler<React.MouseEvent> = () =>
     dispatch(openModal('CONFIRM', {
       heading: intl.formatMessage(messages.muteHeading),
@@ -319,6 +327,10 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
         dispatch(initReport(ReportableEntities.STATUS, account, { status }));
       },
     }));
+  };
+
+  const handleUnblockClick: React.EventHandler<React.MouseEvent> = (e) => {
+    dispatch(unblockAccount(status.account.id));
   };
 
   const handleOpen: React.EventHandler<React.MouseEvent> = (e) => {
@@ -520,16 +532,32 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
         menu.push(null);
       }
 
-      menu.push({
-        text: intl.formatMessage(messages.mute, { name: username }),
-        action: handleMuteClick,
-        icon: require('@tabler/icons/volume-3.svg'),
-      });
-      menu.push({
-        text: intl.formatMessage(messages.block, { name: username }),
-        action: handleBlockClick,
-        icon: require('@tabler/icons/ban.svg'),
-      });
+      if (statusAccount?.relationship?.muting) {
+        menu.push({
+          text: intl.formatMessage(messages.unmute, { name: username }),
+          action: handleUnmuteClick,
+          icon: require('@tabler/icons/volume-3.svg'),
+        });
+      } else {
+        menu.push({
+          text: intl.formatMessage(messages.mute, { name: username }),
+          action: handleMuteClick,
+          icon: require('@tabler/icons/volume-3.svg'),
+        });
+      }
+      if (statusAccount?.relationship?.blocking) {
+        menu.push({
+          text: intl.formatMessage(messages.unblock, { name: username }),
+          action: handleUnblockClick,
+          icon: require('@tabler/icons/ban.svg'),
+        });
+      } else {
+        menu.push({
+          text: intl.formatMessage(messages.block, { name: username }),
+          action: handleBlockClick,
+          icon: require('@tabler/icons/ban.svg'),
+        });
+      }
       menu.push({
         text: intl.formatMessage(messages.report, { name: username }),
         action: handleReport,
