@@ -114,6 +114,7 @@ const SearchResults = () => {
   let noResultsMessage;
   let placeholderComponent = PlaceholderStatus as React.ComponentType;
   let resultsIds: ImmutableOrderedSet<string>;
+  let showStatusWarning = false;
 
   if (selectedFilter === 'accounts') {
     hasMore = results.accountsHasMore;
@@ -142,6 +143,7 @@ const SearchResults = () => {
     loaded = results.statusesLoaded;
 
     if (results.statuses && results.statuses.size > 0) {
+      showStatusWarning = true;
       searchResults = results.statuses.map((statusId: string) => (
         // @ts-ignore
         <StatusContainer
@@ -213,7 +215,7 @@ const SearchResults = () => {
         </HStack>
       ) : renderFilterBar()}
 
-      {selectedFilter === 'statuses' && (
+      {showStatusWarning && (
         <Warning
           message={(
             <FormattedMessage
