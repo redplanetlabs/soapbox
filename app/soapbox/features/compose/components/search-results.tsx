@@ -166,6 +166,7 @@ const SearchResults = () => {
       ));
       resultsIds = trendingStatuses;
     } else if (loaded) {
+      showStatusWarning = true;
       noResultsMessage = (
         <div className='empty-column-indicator'>
           <FormattedMessage
