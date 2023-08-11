@@ -15,6 +15,8 @@ import PlaceholderHashtag from 'soapbox/features/placeholder/components/placehol
 import PlaceholderStatus from 'soapbox/features/placeholder/components/placeholder-status';
 import { useAppDispatch, useAppSelector } from 'soapbox/hooks';
 
+import Warning from './warning';
+
 import type { OrderedSet as ImmutableOrderedSet } from 'immutable';
 import type { VirtuosoHandle } from 'react-virtuoso';
 import type { SearchFilter } from 'soapbox/reducers/search';
@@ -210,6 +212,17 @@ const SearchResults = () => {
           </Text>
         </HStack>
       ) : renderFilterBar()}
+
+      {selectedFilter === 'statuses' && (
+        <Warning
+          message={(
+            <FormattedMessage
+              id='search-results.statuses.message'
+              defaultMessage='This only includes your own posts and posts that mention you.'
+            />
+          )}
+        />
+      )}
 
       {noResultsMessage || (
         <ScrollableList
