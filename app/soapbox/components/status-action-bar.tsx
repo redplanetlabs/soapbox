@@ -148,7 +148,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const isStaff = account ? account.staff : false;
   const isAdmin = account ? account.admin : false;
 
-  const { account: statusAccount } = useAccountLookup(status?.account.username, { withRelationship: true });
+  const { account: statusAccount } = useAccountLookup(account ? status?.account.username : undefined, { withRelationship: true });
 
   if (!status) {
     return null;
