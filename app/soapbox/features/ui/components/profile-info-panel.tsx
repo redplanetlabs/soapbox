@@ -3,14 +3,11 @@
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { usePatronUser } from 'soapbox/api/hooks';
 import Badge from 'soapbox/components/badge';
 import Markup from 'soapbox/components/markup';
 import { Icon, HStack, Stack, Text } from 'soapbox/components/ui';
 import { useAppSelector, useSoapboxConfig } from 'soapbox/hooks';
 import { isLocal } from 'soapbox/utils/accounts';
-import { badgeToTag, getBadges as getAccountBadges } from 'soapbox/utils/badges';
-import { capitalize } from 'soapbox/utils/strings';
 
 import ProfileFamiliarFollowers from './profile-familiar-followers';
 import ProfileField from './profile-field';
@@ -45,49 +42,8 @@ interface IProfileInfoPanel {
 const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) => {
   const intl = useIntl();
   const { displayFqn } = useSoapboxConfig();
-  const { patronUser } = usePatronUser(account?.url);
   const me = useAppSelector(state => state.me);
   const ownAccount = account?.id === me;
-
-  const getStaffBadge = (): React.ReactNode => {
-    if (account?.admin) {
-      return <Badge slug='admin' title={<FormattedMessage id='account_moderation_modal.roles.admin' defaultMessage='Admin' />} key='staff' />;
-    } else if (account?.moderator) {
-      return <Badge slug='moderator' title={<FormattedMessage id='account_moderation_modal.roles.moderator' defaultMessage='Moderator' />} key='staff' />;
-    } else {
-      return null;
-    }
-  };
-
-  const getCustomBadges = (): React.ReactNode[] => {
-    const badges = account ? getAccountBadges(account) : [];
-
-    return badges.map(badge => (
-      <Badge
-        key={badge}
-        slug={badge}
-        title={capitalize(badgeToTag(badge))}
-      />
-    ));
-  };
-
-  const getBadges = (): React.ReactNode[] => {
-    const custom = getCustomBadges();
-    const staffBadge = getStaffBadge();
-    const isPatron = patronUser?.is_patron === true;
-
-    const badges = [];
-
-    if (staffBadge) {
-      badges.push(staffBadge);
-    }
-
-    if (isPatron) {
-      badges.push(<Badge slug='patron' title='Patron' key='patron' />);
-    }
-
-    return [...badges, ...custom];
-  };
 
   const renderBirthday = (): React.ReactNode => {
     const birthday = account?.pleroma?.birthday;
@@ -137,7 +93,6 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const deactivated = account.pleroma?.deactivated ?? false;
   const displayNameHtml = deactivated ? { __html: intl.formatMessage(messages.deactivated) } : { __html: account.display_name_html };
   const memberSinceDate = intl.formatDate(account.created_at, { month: 'long', year: 'numeric' });
-  const badges = getBadges();
 
   return (
     <div className='mt-6 min-w-0 flex-1 sm:px-2'>
@@ -147,12 +102,6 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
             <Text size='lg' weight='bold' dangerouslySetInnerHTML={displayNameHtml} truncate />
 
             {account.bot && <Badge slug='bot' title={intl.formatMessage(messages.bot)} />}
-
-            {badges.length > 0 && (
-              <HStack space={1} alignItems='center'>
-                {badges}
-              </HStack>
-            )}
           </HStack>
 
           <HStack alignItems='center' space={0.5}>
