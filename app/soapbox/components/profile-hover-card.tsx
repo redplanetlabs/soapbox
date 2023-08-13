@@ -47,8 +47,9 @@ export const ProfileHoverCard: React.FC<IProfileHoverCard> = ({ visible = true }
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
 
   const me = useAppSelector(state => state.me);
+  const isLoggedIn = typeof me === 'string';
   const accountId: string | undefined = useAppSelector(state => state.profile_hover_card.accountId || undefined);
-  const { account } = useAccount(accountId, { withRelationship: true });
+  const { account } = useAccount(accountId, { withRelationship: isLoggedIn });
   const targetRef = useAppSelector(state => state.profile_hover_card.ref?.current);
 
   useEffect(() => {

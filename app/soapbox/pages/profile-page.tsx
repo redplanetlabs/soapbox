@@ -31,9 +31,11 @@ const ProfilePage: React.FC<IProfilePage> = ({ params, children }) => {
   const history = useHistory();
   const username = params?.username || '';
 
-  const { account } = useAccountLookup(username, { withRelationship: true });
-
   const me = useAppSelector(state => state.me);
+  const isLoggedIn = typeof me === 'string';
+
+  const { account } = useAccountLookup(username, { withRelationship: isLoggedIn });
+
   const features = useFeatures();
   const { displayFqn } = useSoapboxConfig();
 
